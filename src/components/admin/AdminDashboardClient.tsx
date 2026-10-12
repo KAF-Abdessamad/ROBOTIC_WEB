@@ -32,6 +32,7 @@ import {
   saveProjectAction,
   deleteProjectAction,
 } from "@/app/actions";
+import { ImageUploader } from "./ImageUploader";
 
 interface AdminDashboardClientProps {
   session: {
@@ -305,6 +306,16 @@ export function AdminDashboardClient({
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
                 <input type="hidden" name="id" value={editingEvent.id || ""} />
+                <div className="md:col-span-2">
+                  <ImageUploader
+                    key={`event-${editingEvent.id || "new"}`}
+                    inputName="imageUrl"
+                    currentUrl={editingEvent.imageUrl || "/robotique.webp"}
+                    folder="events"
+                    label="Image ou Affiche de l'événement"
+                    aspectClass="aspect-video"
+                  />
+                </div>
                 <div>
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Titre</label>
                   <input
@@ -379,6 +390,15 @@ export function AdminDashboardClient({
             {initialData.events.map((ev) => (
               <div key={ev.id} className="bg-white/80 dark:bg-slate-900/80 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
                 <div>
+                  {ev.imageUrl && (
+                    <div className="relative w-full h-36 rounded-xl overflow-hidden mb-3 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800">
+                      <img
+                        src={ev.imageUrl}
+                        alt={ev.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-50 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-800">
                       {ev.status}
@@ -446,7 +466,16 @@ export function AdminDashboardClient({
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
                 <input type="hidden" name="id" value={editingMember.id || ""} />
-                <input type="hidden" name="avatarUrl" value={editingMember.avatarUrl || ""} />
+                <div className="md:col-span-2">
+                  <ImageUploader
+                    key={`member-${editingMember.id || "new"}`}
+                    inputName="avatarUrl"
+                    currentUrl={editingMember.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80"}
+                    folder="members"
+                    label="Photo de profil du membre"
+                    aspectClass="aspect-square"
+                  />
+                </div>
                 <div>
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Prénom</label>
                   <input name="firstName" defaultValue={editingMember.firstName} required className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
@@ -539,6 +568,16 @@ export function AdminDashboardClient({
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
                 <input type="hidden" name="id" value={editingProject.id || ""} />
+                <div className="md:col-span-2">
+                  <ImageUploader
+                    key={`project-${editingProject.id || "new"}`}
+                    inputName="imageUrl"
+                    currentUrl={editingProject.imageUrl || "/robotique.webp"}
+                    folder="projects"
+                    label="Image de couverture du projet"
+                    aspectClass="aspect-video"
+                  />
+                </div>
                 <div>
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Titre</label>
                   <input name="title" defaultValue={editingProject.title} required className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
@@ -567,6 +606,15 @@ export function AdminDashboardClient({
             {initialData.projects.map((p) => (
               <div key={p.id} className="bg-white/80 dark:bg-slate-900/80 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
                 <div>
+                  {p.imageUrl && (
+                    <div className="relative w-full h-36 rounded-xl overflow-hidden mb-3 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800">
+                      <img
+                        src={p.imageUrl}
+                        alt={p.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                   <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-50 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-800">{p.status}</span>
                   <h3 className="font-bold text-slate-900 dark:text-white text-base mt-2 mb-1">{p.title}</h3>
                   <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">{p.summary}</p>
