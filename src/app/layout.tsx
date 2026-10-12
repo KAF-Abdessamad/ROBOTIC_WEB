@@ -59,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="light scroll-smooth" data-theme="light" style={{ colorScheme: "light" }} suppressHydrationWarning>
+    <html lang="fr" className="light scroll-smooth" data-theme="light" data-scroll-behavior="smooth" style={{ colorScheme: "light" }} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

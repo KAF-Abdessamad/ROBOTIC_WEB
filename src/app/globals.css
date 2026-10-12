@@ -24,15 +24,33 @@
   --neon-green: #10b981;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Gradients et Glassmorphism technologiques adaptatifs haute lisibilité */
+/* Box-sizing global */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Images responsives */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Glassmorphism technologique adaptatif haute lisibilité */
 .glass-panel {
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(16px);
@@ -71,24 +89,28 @@ body {
   background: linear-gradient(135deg, #0284c7 0%, #3b82f6 50%, #7c3aed 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .dark .gradient-text {
   background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .gradient-text-cyan {
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .dark .gradient-text-cyan {
   background: linear-gradient(135deg, #22d3ee 0%, #0284c7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .glow-cyan {
@@ -103,4 +125,21 @@ body {
 
 .animate-pulse-subtle {
   animation: pulseSubtle 6s ease-in-out infinite;
+}
+
+/* Fix canvas 3D sur mobile */
+canvas {
+  max-width: 100%;
+  touch-action: pan-y;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
 }

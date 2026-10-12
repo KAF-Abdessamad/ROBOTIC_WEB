@@ -28,6 +28,7 @@ export function Navbar() {
                   alt="Université Privée de Fès"
                   width={90}
                   height={45}
+                  style={{ width: "auto" }}
                   className="max-h-8 sm:max-h-9 w-auto object-contain transition-transform group-hover:scale-105"
                   priority
                 />
@@ -39,6 +40,7 @@ export function Navbar() {
                   alt="Robotics Club UPF"
                   width={140}
                   height={45}
+                  style={{ width: "auto" }}
                   className="max-h-8 sm:max-h-9 w-auto object-contain transition-transform group-hover:scale-105"
                   priority
                 />
@@ -69,7 +71,7 @@ export function Navbar() {
           </nav>
 
           {/* Boutons d'Action & Theme Switcher */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             {/* Toggle Clair / Sombre */}
             <ThemeToggle />
 

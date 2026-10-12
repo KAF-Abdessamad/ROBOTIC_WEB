@@ -12,13 +12,8 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     setMounted(true);
   }, []);
 
-  if (!mounted) {
-    return (
-      <div className={`w-9 h-9 rounded-xl border border-slate-700/40 bg-slate-900/40 ${className}`} />
-    );
-  }
-
-  const isDark = theme === "dark";
+  // Mode clair par défaut tant que le client n'est pas encore monté
+  const isDark = mounted ? theme === "dark" : false;
 
   return (
     <button
@@ -26,6 +21,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       type="button"
       title={isDark ? "Passer au mode clair" : "Passer au mode sombre"}
       aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
+      suppressHydrationWarning
       className={`relative inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl transition-all duration-300 ${
         isDark
           ? "bg-slate-900/90 text-amber-300 hover:text-amber-200 hover:bg-slate-800 border border-slate-800 shadow-md shadow-amber-500/10"

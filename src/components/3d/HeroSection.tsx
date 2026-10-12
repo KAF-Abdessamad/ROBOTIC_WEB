@@ -70,7 +70,7 @@ function PermanentRobotCard() {
     <div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full max-w-[480px] sm:max-w-[520px] aspect-square mx-auto flex items-center justify-center cursor-pointer group"
+      className="relative w-full max-w-[320px] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[520px] aspect-square mx-auto flex items-center justify-center cursor-pointer group"
       style={{ perspective: 1000 }}
     >
       {/* Halo lumineux d'ambiance */}
@@ -179,8 +179,8 @@ export function HeroSection({ onJoin }: HeroSectionProps) {
       {mounted && <ParticlesBg />}
 
       {/* ── Contenu ── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center min-h-[75vh]">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pt-24 sm:pt-28 pb-12 sm:pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[60vh] sm:min-h-[75vh]">
 
           {/* ── GAUCHE : Texte principal ── */}
           <motion.div
@@ -200,7 +200,7 @@ export function HeroSection({ onJoin }: HeroSectionProps) {
             {/* Titre principal */}
             <motion.h1
               variants={item}
-              className="text-5xl sm:text-6xl xl:text-7xl font-black tracking-tight leading-[0.92] text-slate-900 dark:text-white"
+              className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black tracking-tight leading-[0.92] text-slate-900 dark:text-white"
             >
               BUILD{" "}
               <span
@@ -214,7 +214,7 @@ export function HeroSection({ onJoin }: HeroSectionProps) {
               >
                 THE FUTURE
               </span>
-              <span className="text-3xl sm:text-4xl xl:text-5xl font-bold text-slate-800 dark:text-slate-200 mt-3 block">
+              <span className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-bold text-slate-800 dark:text-slate-200 mt-2 sm:mt-3 block">
                 Robotics Club{" "}
                 <span className="text-cyan-600 dark:text-cyan-400">UPF</span>
               </span>

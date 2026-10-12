@@ -17,9 +17,10 @@ function EventCard({ event }: { event: any }) {
   const isUpcoming = isEventUpcoming(event);
   const dateObj = new Date(event.startDate);
   const day = dateObj.getDate();
-  const month = dateObj.toLocaleDateString("fr-FR", { month: "short" });
+  const MONTHS_FR = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  const month = MONTHS_FR[dateObj.getMonth()] || dateObj.toLocaleDateString("fr-FR", { month: "short" });
   const year = dateObj.getFullYear();
-  const time = dateObj.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  const time = `${String(dateObj.getHours()).padStart(2, "0")}:${String(dateObj.getMinutes()).padStart(2, "0")}`;
 
   return (
     <div className="glass-panel rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-cyan-500/50 overflow-hidden flex flex-col group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/10 shadow-md">
@@ -35,7 +36,7 @@ function EventCard({ event }: { event: any }) {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
 
         {/* Date badge */}
-        <div className="absolute top-3 left-3 flex flex-col items-center bg-white/95 dark:bg-slate-950/85 backdrop-blur-sm border border-slate-200 dark:border-slate-700/60 rounded-xl px-3 py-2 shadow-sm">
+        <div suppressHydrationWarning className="absolute top-3 left-3 flex flex-col items-center bg-white/95 dark:bg-slate-950/85 backdrop-blur-sm border border-slate-200 dark:border-slate-700/60 rounded-xl px-3 py-2 shadow-sm">
           <span className="text-2xl font-black text-slate-900 dark:text-white leading-none">{day}</span>
           <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">{month}</span>
           <span className="text-[10px] text-slate-500">{year}</span>

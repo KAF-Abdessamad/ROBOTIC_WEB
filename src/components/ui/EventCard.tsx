@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, MapPin, Tag, ArrowRight } from "lucide-react";
 import { EventItem } from "@/lib/data/demo-data";
 
@@ -22,12 +23,14 @@ export function EventCard({ event }: EventCardProps) {
   const isUpcoming = event.status === "upcoming";
 
   return (
-    <div className="glass-panel glass-panel-hover rounded-2xl overflow-hidden flex flex-col group border border-slate-800/80">
-      <div className="relative h-48 w-full overflow-hidden bg-slate-900">
-        <img
+    <div className="glass-panel glass-panel-hover rounded-2xl overflow-hidden flex flex-col group border border-slate-200 dark:border-slate-800/80 shadow-md">
+      <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
+        <Image
           src={event.imageUrl}
           alt={event.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
@@ -52,34 +55,34 @@ export function EventCard({ event }: EventCardProps) {
         </div>
       </div>
 
-      <div className="p-6 flex-1 flex flex-col justify-between">
+      <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
         <div>
-          <div className="flex flex-col gap-1.5 text-xs text-slate-400 mb-3">
-            <div className="flex items-center gap-2 text-cyan-300 font-medium">
-              <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="flex flex-col gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-3">
+            <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 font-medium">
+              <Calendar className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
               <span>{formattedDate} à {formattedTime}</span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 text-slate-500" />
+              <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span className="truncate">{event.location}</span>
             </div>
           </div>
 
-          <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-2">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-2">
             {event.title}
           </h3>
 
-          <p className="mt-3 text-sm text-slate-400 leading-relaxed line-clamp-3">
+          <p className="mt-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
             {event.description}
           </p>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between">
+        <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
           <Link
             href={`/activities/${event.slug}`}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-cyan-400 hover:text-cyan-300 group-hover:translate-x-1 transition-all"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 group-hover:translate-x-1 transition-all"
           >
-            Voir les détails & programme
+            Voir les détails &amp; programme
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
