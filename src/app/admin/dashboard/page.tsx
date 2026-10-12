@@ -3,7 +3,6 @@ import { requireAdminSession } from "@/lib/auth";
 import {
   getAdminApplicationsAction,
   getAdminEventsAction,
-  getAdminProjectsAction,
   getAdminMembersAction,
   getAdminSettingsAction,
   getAdminMessagesAction,
@@ -19,11 +18,10 @@ export const metadata: Metadata = {
 export default async function AdminDashboardPage() {
   const session = await requireAdminSession();
 
-  const [applications, events, projects, members, settings, messages] =
+  const [applications, events, members, settings, messages] =
     await Promise.all([
       getAdminApplicationsAction(),
       getAdminEventsAction(),
-      getAdminProjectsAction(),
       getAdminMembersAction(),
       getAdminSettingsAction(),
       getAdminMessagesAction(),
@@ -36,7 +34,6 @@ export default async function AdminDashboardPage() {
         initialData={{
           applications,
           events,
-          projects,
           members,
           settings,
           messages,

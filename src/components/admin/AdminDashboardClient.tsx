@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import {
   Users,
   Calendar,
-  Cpu,
   Settings,
   Mail,
   Shield,
@@ -29,8 +28,6 @@ import {
   deleteEventAction,
   saveMemberAction,
   deleteMemberAction,
-  saveProjectAction,
-  deleteProjectAction,
 } from "@/app/actions";
 import { ImageUploader } from "./ImageUploader";
 
@@ -45,7 +42,7 @@ interface AdminDashboardClientProps {
   initialData: {
     applications: any[];
     events: any[];
-    projects: any[];
+    projects?: any[];
     members: any[];
     settings: any[];
     messages: any[];
@@ -58,7 +55,7 @@ export function AdminDashboardClient({
 }: AdminDashboardClientProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<
-    "applications" | "events" | "members" | "projects" | "settings" | "messages"
+    "applications" | "events" | "members" | "settings" | "messages"
   >("applications");
 
   const [notification, setNotification] = useState<string | null>(null);
@@ -66,7 +63,6 @@ export function AdminDashboardClient({
   // Modals state
   const [editingEvent, setEditingEvent] = useState<any | null>(null);
   const [editingMember, setEditingMember] = useState<any | null>(null);
-  const [editingProject, setEditingProject] = useState<any | null>(null);
 
   function notify(msg: string) {
     setNotification(msg);
@@ -155,18 +151,6 @@ export function AdminDashboardClient({
         >
           <Users className="w-4 h-4" />
           Staff & Membres ({initialData.members.length})
-        </button>
-
-        <button
-          onClick={() => setActiveTab("projects")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
-            activeTab === "projects"
-              ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20"
-              : "bg-white/60 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
-          }`}
-        >
-          <Cpu className="w-4 h-4" />
-          Projets ({initialData.projects.length})
         </button>
 
         <button
@@ -542,102 +526,7 @@ export function AdminDashboardClient({
         </div>
       )}
 
-      {/* ── 4. ONGLET PROJETS ── */}
-      {activeTab === "projects" && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Projets Robotiques</h2>
-            <button
-              onClick={() => setEditingProject({ id: "", title: "", slug: "", summary: "", description: "", technologies: "ROS 2, Arduino", projectDate: "2025", status: "in_progress", imageUrl: "/robotique.webp" })}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-colors shadow-md shadow-cyan-500/20"
-            >
-              <Plus className="w-4 h-4" />
-              Nouveau projet
-            </button>
-          </div>
-
-          {editingProject && (
-            <div className="bg-white/95 dark:bg-slate-900/95 p-6 rounded-3xl border border-cyan-500/40 shadow-lg">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4">{editingProject.id ? "Modifier le projet" : "Ajouter un projet"}</h3>
-              <form
-                action={async (fd) => {
-                  const res = await saveProjectAction(fd);
-                  notify(res.message);
-                  if (res.success) setEditingProject(null);
-                }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-              >
-                <input type="hidden" name="id" value={editingProject.id || ""} />
-                <div className="md:col-span-2">
-                  <ImageUploader
-                    key={`project-${editingProject.id || "new"}`}
-                    inputName="imageUrl"
-                    currentUrl={editingProject.imageUrl || "/robotique.webp"}
-                    folder="projects"
-                    label="Image de couverture du projet"
-                    aspectClass="aspect-video"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Titre</label>
-                  <input name="title" defaultValue={editingProject.title} required className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Année / Période</label>
-                  <input name="projectDate" defaultValue={editingProject.projectDate} required className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Technologies (séparées par des virgules)</label>
-                  <input name="technologies" defaultValue={Array.isArray(editingProject.technologies) ? editingProject.technologies.join(", ") : editingProject.technologies} required className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Résumé</label>
-                  <textarea name="summary" defaultValue={editingProject.summary} rows={2} required className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
-                </div>
-                <div className="md:col-span-2 flex justify-end gap-3">
-                  <button type="button" onClick={() => setEditingProject(null)} className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Annuler</button>
-                  <button type="submit" className="px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-500 text-slate-950 font-bold">Enregistrer</button>
-                </div>
-              </form>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {initialData.projects.map((p) => (
-              <div key={p.id} className="bg-white/80 dark:bg-slate-900/80 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-                <div>
-                  {p.imageUrl && (
-                    <div className="relative w-full h-36 rounded-xl overflow-hidden mb-3 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800">
-                      <img
-                        src={p.imageUrl}
-                        alt={p.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-50 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-800">{p.status}</span>
-                  <h3 className="font-bold text-slate-900 dark:text-white text-base mt-2 mb-1">{p.title}</h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">{p.summary}</p>
-                </div>
-                <div className="flex items-center justify-end gap-2 mt-4 pt-3 border-t border-slate-200 dark:border-slate-800">
-                  <button onClick={() => setEditingProject(p)} className="p-1.5 text-xs rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"><Edit2 className="w-4 h-4" /></button>
-                  <form action={async (fd) => {
-                    if (confirm("Supprimer ce projet ?")) {
-                      const res = await deleteProjectAction(fd);
-                      notify(res.message);
-                    }
-                  }}>
-                    <input type="hidden" name="id" value={p.id} />
-                    <button type="submit" className="p-1.5 text-xs rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 text-red-500"><Trash2 className="w-4 h-4" /></button>
-                  </form>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── 5. ONGLET INFOS DYNAMIQUES DU CLUB (PARAMÈTRES SITE) ── */}
+      {/* ── 4. ONGLET INFOS DYNAMIQUES DU CLUB (PARAMÈTRES SITE) ── */}
       {activeTab === "settings" && (
         <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
           <div>

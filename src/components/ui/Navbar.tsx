@@ -19,28 +19,40 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/85 dark:bg-slate-950/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Logos UPF & Club de Robotique (Présents uniquement dans la Navbar) */}
+          {/* Logos UPF & Club de Robotique */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="bg-white rounded-xl px-2.5 py-1.5 flex items-center gap-2 shadow-md shadow-cyan-500/10 border border-slate-200 group-hover:scale-105 transition-transform h-10 sm:h-11">
-              <Image
-                src="/logo upf.png"
-                alt="Université Privée de Fès"
-                width={50}
-                height={32}
-                className="h-6 sm:h-7 w-auto object-contain"
-                priority
-              />
-              <div className="w-px h-5 bg-slate-300" />
-              <Image
-                src="/UPF LOGO CLUBS-robotique-09.png"
-                alt="Robotics Club UPF"
-                width={100}
-                height={32}
-                className="h-6 sm:h-7 w-auto object-contain"
-                priority
-              />
+            <div className="bg-white/95 dark:bg-slate-900/90 rounded-2xl px-3 py-1.5 flex items-center gap-2.5 shadow-sm border border-slate-200 dark:border-slate-800 group-hover:border-cyan-500/50 group-hover:shadow-md group-hover:shadow-cyan-500/10 transition-all">
+              <div className="relative h-8 sm:h-9 w-14 sm:w-16 flex items-center justify-center">
+                <Image
+                  src="/logo upf.png"
+                  alt="Université Privée de Fès"
+                  width={90}
+                  height={45}
+                  className="max-h-8 sm:max-h-9 w-auto object-contain transition-transform group-hover:scale-105"
+                  priority
+                />
+              </div>
+              <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
+              <div className="relative h-8 sm:h-9 w-20 sm:w-24 flex items-center justify-center">
+                <Image
+                  src="/UPF LOGO CLUBS-robotique-09.png"
+                  alt="Robotics Club UPF"
+                  width={140}
+                  height={45}
+                  className="max-h-8 sm:max-h-9 w-auto object-contain transition-transform group-hover:scale-105"
+                  priority
+                />
+              </div>
             </div>
-            
+
+            <div className="hidden xl:flex flex-col">
+              <span className="font-extrabold text-sm tracking-tight text-slate-900 dark:text-white leading-none">
+                Robotics Club
+              </span>
+              <span className="text-[10px] font-mono font-semibold text-cyan-600 dark:text-cyan-400 tracking-wider uppercase mt-0.5">
+                UPF Fès
+              </span>
+            </div>
           </Link>
 
           {/* Navigation Simple Desktop */}

@@ -182,18 +182,38 @@ export function HeroSection({ onJoin }: HeroSectionProps) {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center min-h-[75vh]">
 
-          {/* ── GAUCHE : Texte (Sans logos ici : ils sont uniquement en Navbar) ── */}
+          {/* ── GAUCHE : Texte & Logos Officiels ── */}
           <motion.div
             variants={container}
             initial="hidden"
             animate="show"
             className="flex flex-col justify-center order-2 lg:order-1"
           >
-            {/* Badge Tech */}
-            <motion.div variants={item}>
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-400 border border-cyan-300 dark:border-cyan-500/30 mb-5 tracking-widest uppercase font-mono shadow-sm">
+            {/* Logos Officiels UPF & Club de Robotique */}
+            <motion.div variants={item} className="mb-6 flex flex-wrap items-center gap-3">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 shadow-md shadow-cyan-500/5 group">
+                <Image
+                  src="/logo upf.png"
+                  alt="Université Privée de Fès"
+                  width={90}
+                  height={42}
+                  className="h-8 sm:h-9 w-auto object-contain"
+                  priority
+                />
+                <div className="w-px h-6 bg-slate-300 dark:bg-slate-700" />
+                <Image
+                  src="/UPF LOGO CLUBS-robotique-09.png"
+                  alt="Robotics Club UPF"
+                  width={140}
+                  height={42}
+                  className="h-8 sm:h-9 w-auto object-contain"
+                  priority
+                />
+              </div>
+
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold bg-cyan-50 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-400 border border-cyan-300 dark:border-cyan-500/30 font-mono tracking-wider uppercase shadow-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
-                Université Privée de Fès — UPF
+                Club Officiel UPF
               </span>
             </motion.div>
 
