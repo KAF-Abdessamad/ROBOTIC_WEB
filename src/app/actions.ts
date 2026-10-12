@@ -37,13 +37,30 @@ export async function submitJoinApplication(
   prevState: ActionResult | null,
   formData: FormData
 ): Promise<ActionResult> {
+  const firstName = ((formData.get("firstName") as string) || "").trim();
+  const lastName = ((formData.get("lastName") as string) || "").trim();
+  const rawFullName = ((formData.get("fullName") as string) || "").trim();
+  const fullName = rawFullName || `${firstName} ${lastName}`.trim();
+
+  const studyLevelRaw = (formData.get("studyLevel") as string) || "";
+  const studyLevel =
+    studyLevelRaw &&
+    ["1A", "2A", "3A", "4A", "5A", "Master", "Doctorat", "Autre"].includes(studyLevelRaw)
+      ? studyLevelRaw
+      : "1A";
+
+  let motivation = ((formData.get("motivation") as string) || "").trim();
+  if (!motivation) {
+    motivation = "Passionné(e) par la robotique et motivé(e) pour rejoindre le Robotics Club UPF.";
+  }
+
   const rawData = {
-    fullName: formData.get("fullName"),
+    fullName,
     email: formData.get("email"),
     phone: formData.get("phone") || "",
     facultyMajor: formData.get("facultyMajor"),
-    studyLevel: formData.get("studyLevel"),
-    motivation: formData.get("motivation"),
+    studyLevel,
+    motivation,
     experience: formData.get("experience") || "",
     honeypot: formData.get("website_url_hp") || "", // Champ piège honeypot
   };
@@ -60,7 +77,6 @@ export async function submitJoinApplication(
 
   // Protection Honeypot
   if (validation.data.honeypot && validation.data.honeypot.length > 0) {
-    // Fausse réponse positive pour neutraliser les robots spammeurs
     return {
       success: true,
       message: "Candidature reçue.",
@@ -79,6 +95,9 @@ export async function submitJoinApplication(
         experience: validation.data.experience || null,
         status: "pending",
       });
+
+      revalidatePath("/admin/dashboard");
+      revalidatePath("/");
     }
 
     return {

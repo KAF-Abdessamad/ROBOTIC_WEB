@@ -26,7 +26,7 @@ export function JoinForm() {
     if (fullName.length < 3) errors.fullName = "Le nom et prénom doit comporter au moins 3 caractères.";
     if (!email.includes("@") || !email.includes(".")) errors.email = "Adresse email invalide.";
     if (!facultyMajor) errors.facultyMajor = "Veuillez sélectionner votre filière UPF.";
-    if (motivation.length < 30) errors.motivation = "Votre motivation doit comporter au moins 30 caractères.";
+    if (motivation.length < 5) errors.motivation = "Votre motivation doit comporter au moins 5 caractères.";
 
     if (Object.keys(errors).length > 0) {
       setClientErrors(errors);

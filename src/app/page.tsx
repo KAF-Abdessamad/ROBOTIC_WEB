@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Calendar, Users, Cpu, ArrowRight, Zap } from "lucide-react";
+import { Calendar, Users, Cpu, ArrowRight, Zap, Loader2, CheckCircle2, AlertCircle, Send } from "lucide-react";
 import { HeroSection } from "@/components/3d/HeroSection";
 import { DEMO_EVENTS, DEMO_MEMBERS, isEventUpcoming } from "@/lib/data/demo-data";
+import { submitJoinApplication, ActionResult } from "@/app/actions";
 
 // ── Animated section wrapper ──────────────────────────────────────────────────
 function FadeIn({
@@ -146,6 +147,8 @@ export default function HomePage() {
   const [joinOpen, setJoinOpen] = useState(false);
   const [liveEvents, setLiveEvents] = useState(DEMO_EVENTS);
   const [liveMembers, setLiveMembers] = useState(DEMO_MEMBERS);
+  const [isPending, startTransition] = useTransition();
+  const [formResult, setFormResult] = useState<ActionResult | null>(null);
 
   React.useEffect(() => {
     fetch("/api/public-content")
@@ -162,6 +165,20 @@ export default function HomePage() {
     setTimeout(() => {
       joinRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 50);
+  };
+
+  const handleQuickJoinSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    startTransition(async () => {
+      const res = await submitJoinApplication(null, formData);
+      setFormResult(res);
+      if (res.success) {
+        form.reset();
+      }
+    });
   };
 
   const upcomingEvents = liveEvents.filter((e: any) => isEventUpcoming(e)).slice(0, 3);
@@ -339,8 +356,29 @@ export default function HomePage() {
             </p>
 
             <div className="glass-panel rounded-3xl border border-slate-200 dark:border-slate-800 p-8 sm:p-10 shadow-xl">
-              {joinOpen ? (
-                <div className="space-y-4 text-left">
+              {formResult?.success ? (
+                <div className="py-8 text-center space-y-4">
+                  <div className="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-500/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                    Candidature envoyée avec succès !
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm max-w-md mx-auto leading-relaxed">
+                    {formResult.message}
+                  </p>
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormResult(null)}
+                      className="px-5 py-2.5 rounded-xl font-semibold text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors"
+                    >
+                      Envoyer une autre candidature
+                    </button>
+                  </div>
+                </div>
+              ) : joinOpen ? (
+                <form onSubmit={handleQuickJoinSubmit} className="space-y-4 text-left">
                   <p className="text-sm text-slate-600 dark:text-slate-400 text-center mb-6">
                     Formulaire de candidature — ou contacte-nous directement à{" "}
                     <a
@@ -350,47 +388,112 @@ export default function HomePage() {
                       robotics.club@upf.ac.ma
                     </a>
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="Prénom"
-                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Nom"
-                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm"
-                    />
+
+                  {formResult && !formResult.success && (
+                    <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{formResult.message}</span>
+                    </div>
+                  )}
+
+                  {/* Honeypot invisible */}
+                  <div className="hidden" aria-hidden="true">
+                    <input type="text" name="website_url_hp" tabIndex={-1} autoComplete="off" />
                   </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <input
+                        type="text"
+                        name="firstName"
+                        required
+                        placeholder="Prénom *"
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        name="lastName"
+                        required
+                        placeholder="Nom *"
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm"
+                      />
+                    </div>
+                  </div>
+
                   <input
                     type="email"
-                    placeholder="Email universitaire"
+                    name="email"
+                    required
+                    placeholder="Email universitaire * (ex: prenom.nom@upf.ac.ma)"
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm"
                   />
-                  <select className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm">
-                    <option value="">Sélectionner votre filière</option>
-                    <option>Génie Informatique</option>
-                    <option>Génie des Systèmes Embarqués</option>
-                    <option>Génie Civil</option>
-                    <option>Génie des Énergies Renouvelables</option>
-                    <option>IAAR</option>
-                    <option>Design et Architecture d&apos;Intérieur</option>
-                    <option>Urbanisme et Aménagement</option>
-                    <option>Cycle Préparatoire Scientifique</option>
-                  </select>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <select
+                      name="facultyMajor"
+                      required
+                      defaultValue=""
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm"
+                    >
+                      <option value="" disabled>Sélectionner votre filière UPF *</option>
+                      <option value="Génie Informatique">Génie Informatique</option>
+                      <option value="Génie des Systèmes Embarqués">Génie des Systèmes Embarqués</option>
+                      <option value="Génie Civil">Génie Civil</option>
+                      <option value="Génie des Énergies Renouvelables">Génie des Énergies Renouvelables</option>
+                      <option value="IAAR">IAAR</option>
+                      <option value="Design et Architecture d'Intérieur">Design et Architecture d&apos;Intérieur</option>
+                      <option value="Urbanisme et Aménagement">Urbanisme et Aménagement</option>
+                      <option value="Cycle Préparatoire Scientifique">Cycle Préparatoire Scientifique</option>
+                    </select>
+
+                    <select
+                      name="studyLevel"
+                      required
+                      defaultValue="1A"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm"
+                    >
+                      <option value="1A">1ère année (Cycle Prépa / Tronc Commun)</option>
+                      <option value="2A">2ème année (Cycle Prépa)</option>
+                      <option value="3A">3ème année (1ère année Ingénieur)</option>
+                      <option value="4A">4ème année (2ème année Ingénieur)</option>
+                      <option value="5A">5ème année (Dernière année Ingénieur)</option>
+                      <option value="Master">Master Spécialisé</option>
+                      <option value="Doctorat">Doctorat</option>
+                      <option value="Autre">Autre cycle</option>
+                    </select>
+                  </div>
+
                   <textarea
+                    name="motivation"
                     rows={3}
-                    placeholder="Parlez-nous de votre motivation (optionnel)..."
+                    placeholder="Parlez-nous de votre motivation ou intérêt pour le club..."
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none shadow-sm"
                   />
-                  <button className="w-full py-3.5 rounded-xl font-bold text-slate-950 text-sm bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 transition-all hover:scale-[1.02] shadow-lg shadow-cyan-500/25">
-                    Envoyer ma candidature
+
+                  <button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full py-3.5 rounded-xl font-bold text-slate-950 text-sm bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+                  >
+                    {isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Envoi en cours...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Envoyer ma candidature</span>
+                        <Send className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
-                </div>
+                </form>
               ) : (
                 <button
                   onClick={() => setJoinOpen(true)}
-                  className="w-full py-4 rounded-xl font-bold text-slate-950 text-base bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 transition-all hover:scale-[1.02] shadow-lg shadow-cyan-500/30 flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-xl font-bold text-slate-950 text-base bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 transition-all hover:scale-[1.02] shadow-lg shadow-cyan-500/30 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   Rejoindre le Club
                   <ArrowRight className="w-5 h-5" />

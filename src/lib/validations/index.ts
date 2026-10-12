@@ -42,13 +42,15 @@ export const joinApplicationSchema = z.object({
   facultyMajor: z
     .string()
     .min(2, "Veuillez sélectionner votre filière UPF"),
-  studyLevel: z.enum(
-    ["1A", "2A", "3A", "4A", "5A", "Master", "Doctorat", "Autre"],
-    { message: "Veuillez sélectionner un niveau d'études valide" }
-  ),
+  studyLevel: z
+    .enum(["1A", "2A", "3A", "4A", "5A", "Master", "Doctorat", "Autre"], {
+      message: "Veuillez sélectionner un niveau d'études valide",
+    })
+    .default("1A"),
   motivation: z
     .string()
-    .min(30, "Expliquez votre motivation en au moins 30 caractères"),
+    .min(5, "Expliquez votre motivation en au moins 5 caractères")
+    .default("Passionné(e) par la robotique et motivé(e) pour rejoindre le Robotics Club UPF."),
   experience: z
     .string()
     .optional()
