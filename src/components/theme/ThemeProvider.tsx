@@ -11,19 +11,19 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "dark",
+  theme: "light",
   setTheme: () => {},
   toggleTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [theme, setThemeState] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Premier visiteur : par défaut toujours 'dark'
+    // Premier visiteur : par défaut toujours 'light'
     const saved = localStorage.getItem("upf_theme") as Theme | null;
-    const initialTheme: Theme = saved === "light" ? "light" : "dark";
+    const initialTheme: Theme = saved === "dark" ? "dark" : "light";
     setThemeState(initialTheme);
     applyTheme(initialTheme);
     setMounted(true);

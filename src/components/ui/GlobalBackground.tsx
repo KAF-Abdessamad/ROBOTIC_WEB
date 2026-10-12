@@ -12,7 +12,7 @@ export function GlobalBackground() {
     setMounted(true);
   }, []);
 
-  const isDark = !mounted || theme === "dark";
+  const isDark = mounted && theme === "dark";
 
   return (
     <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden select-none transition-colors duration-500">
