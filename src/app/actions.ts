@@ -23,6 +23,7 @@ import { eq, desc, asc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { DEMO_EVENTS, DEMO_MEMBERS } from "@/lib/data/demo-data";
+import { sendInterviewInvitationEmail, sendAcceptanceEmail } from "@/lib/email";
 
 export interface ActionResult {
   success: boolean;
@@ -403,6 +404,98 @@ export async function updateApplicationStatusAction(formData: FormData): Promise
     return { success: true, message: "Statut de la candidature mis à jour !" };
   } catch (err: any) {
     return { success: false, message: err?.message || "Erreur" };
+  }
+}
+
+// Convoquer un candidat à un entretien et lui envoyer l'email de convocation
+export async function sendInterviewInvitationAction(formData: FormData): Promise<ActionResult> {
+  await requireAdminSession();
+  const id = formData.get("id") as string;
+  const interviewDate = (formData.get("interviewDate") as string)?.trim() || "Prochainement";
+  const interviewTime = (formData.get("interviewTime") as string)?.trim() || "À convenir";
+  const locationOrLink =
+    (formData.get("locationOrLink") as string)?.trim() ||
+    "Campus UPF — Local Robotique (Bâtiment B)";
+  const notes = (formData.get("notes") as string)?.trim() || "";
+
+  if (!id) return { success: false, message: "ID de candidature manquant" };
+
+  try {
+    const [app] = await db
+      .select()
+      .from(joinApplications)
+      .where(eq(joinApplications.id, id));
+    if (!app) return { success: false, message: "Candidature introuvable" };
+
+    // Mettre à jour le statut vers under_review (en cours d'examen / entretien)
+    await db
+      .update(joinApplications)
+      .set({ status: "under_review", updatedAt: new Date() })
+      .where(eq(joinApplications.id, id));
+
+    // Envoyer l'email
+    const mailResult = await sendInterviewInvitationEmail({
+      to: app.email,
+      studentName: app.fullName,
+      interviewDate,
+      interviewTime,
+      locationOrLink,
+      notes,
+    });
+
+    revalidatePath("/admin/dashboard");
+    return {
+      success: true,
+      message: mailResult.message,
+    };
+  } catch (err: any) {
+    console.error("sendInterviewInvitationAction error:", err);
+    return { success: false, message: err?.message || "Erreur lors de l'envoi de la convocation" };
+  }
+}
+
+// Confirmer l'acceptation finale et envoyer l'email de bienvenue
+export async function sendAcceptanceEmailAction(formData: FormData): Promise<ActionResult> {
+  await requireAdminSession();
+  const id = formData.get("id") as string;
+  const team = (formData.get("team") as string)?.trim() || "Systèmes Autonomes & Robotique";
+  const welcomeMessage = (formData.get("welcomeMessage") as string)?.trim() || "";
+  const whatsappLink =
+    (formData.get("whatsappLink") as string)?.trim() ||
+    "https://chat.whatsapp.com/RoboticsClubUPF";
+
+  if (!id) return { success: false, message: "ID de candidature manquant" };
+
+  try {
+    const [app] = await db
+      .select()
+      .from(joinApplications)
+      .where(eq(joinApplications.id, id));
+    if (!app) return { success: false, message: "Candidature introuvable" };
+
+    // Mettre à jour le statut vers accepted
+    await db
+      .update(joinApplications)
+      .set({ status: "accepted", updatedAt: new Date() })
+      .where(eq(joinApplications.id, id));
+
+    // Envoyer l'email
+    const mailResult = await sendAcceptanceEmail({
+      to: app.email,
+      studentName: app.fullName,
+      team,
+      welcomeMessage,
+      whatsappLink,
+    });
+
+    revalidatePath("/admin/dashboard");
+    return {
+      success: true,
+      message: mailResult.message,
+    };
+  } catch (err: any) {
+    console.error("sendAcceptanceEmailAction error:", err);
+    return { success: false, message: err?.message || "Erreur lors de la validation de l'admission" };
   }
 }
 
