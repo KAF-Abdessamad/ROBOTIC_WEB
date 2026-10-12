@@ -22,6 +22,7 @@ import {
   Loader2,
   X,
   Send,
+  RefreshCw,
 } from "lucide-react";
 import {
   logoutAdmin,
@@ -33,6 +34,7 @@ import {
   deleteEventAction,
   saveMemberAction,
   deleteMemberAction,
+  getFreshApplicationsAction,
 } from "@/app/actions";
 import { ImageUploader } from "./ImageUploader";
 
@@ -71,9 +73,35 @@ export function AdminDashboardClient({
   const [acceptanceModalApp, setAcceptanceModalApp] = useState<any | null>(null);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
 
+  const [applications, setApplications] = useState<any[]>(initialData.applications);
+  const [isRefreshingApps, setIsRefreshingApps] = useState(false);
+
+  React.useEffect(() => {
+    setApplications(initialData.applications);
+  }, [initialData.applications]);
+
+  React.useEffect(() => {
+    handleRefreshApplications();
+  }, []);
+
+  async function handleRefreshApplications() {
+    setIsRefreshingApps(true);
+    try {
+      const fresh = await getFreshApplicationsAction();
+      if (Array.isArray(fresh)) {
+        setApplications(fresh);
+      }
+    } catch (e: any) {
+      console.error("Refresh applications error:", e);
+    } finally {
+      setIsRefreshingApps(false);
+    }
+  }
+
   function notify(msg: string) {
     setNotification(msg);
     router.refresh();
+    handleRefreshApplications();
     setTimeout(() => setNotification(null), 4000);
   }
 
@@ -133,7 +161,7 @@ export function AdminDashboardClient({
           }`}
         >
           <GraduationCap className="w-4 h-4" />
-          Candidatures ({initialData.applications.length})
+          Candidatures ({applications.length})
         </button>
 
         <button
@@ -188,7 +216,7 @@ export function AdminDashboardClient({
       {/* ── 1. ONGLET CANDIDATURES ── */}
       {activeTab === "applications" && (
         <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-          <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                 Dossiers de Candidature Reçus
@@ -197,14 +225,26 @@ export function AdminDashboardClient({
                 Table `join_applications` de la base Neon PostgreSQL
               </p>
             </div>
-            <span className="px-3 py-1 rounded-full text-xs font-mono bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-800">
-              {initialData.applications.length} enregistrements
-            </span>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleRefreshApplications}
+                disabled={isRefreshingApps}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyan-50 hover:bg-cyan-100 dark:bg-cyan-950/60 dark:hover:bg-cyan-900/60 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 transition-all cursor-pointer shadow-sm active:scale-95"
+                title="Recharger depuis PostgreSQL"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isRefreshingApps ? "animate-spin text-cyan-500" : ""}`} />
+                <span>{isRefreshingApps ? "Actualisation..." : "Actualiser la liste"}</span>
+              </button>
+              <span className="px-3 py-1.5 rounded-xl text-xs font-mono bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-800">
+                {applications.length} enregistrement{applications.length > 1 ? "s" : ""}
+              </span>
+            </div>
           </div>
 
-          {initialData.applications.length > 0 ? (
+          {applications.length > 0 ? (
             <div className="divide-y divide-slate-200 dark:divide-slate-800">
-              {initialData.applications.map((app) => (
+              {applications.map((app) => (
                 <div key={app.id} className="p-6 hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
                     <div>
@@ -304,9 +344,18 @@ export function AdminDashboardClient({
               ))}
             </div>
           ) : (
-            <div className="p-12 text-center text-slate-500 dark:text-slate-400 text-sm">
-              <Users className="w-8 h-8 text-slate-400 dark:text-slate-600 mx-auto mb-3" />
-              Aucune candidature enregistrée pour le moment.
+            <div className="p-12 text-center text-slate-500 dark:text-slate-400 text-sm space-y-3">
+              <Users className="w-8 h-8 text-slate-400 dark:text-slate-600 mx-auto" />
+              <p>Aucune candidature affichée pour le moment.</p>
+              <button
+                type="button"
+                onClick={handleRefreshApplications}
+                disabled={isRefreshingApps}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950 hover:bg-cyan-400 transition-all shadow-md shadow-cyan-500/20 cursor-pointer"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isRefreshingApps ? "animate-spin" : ""}`} />
+                <span>Actualiser depuis la base Neon</span>
+              </button>
             </div>
           )}
         </div>

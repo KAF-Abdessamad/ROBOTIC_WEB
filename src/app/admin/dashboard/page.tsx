@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   description: "Espace d'administration centralisé du Robotics Club de l'UPF.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AdminDashboardPage() {
   const session = await requireAdminSession();
 

@@ -289,12 +289,36 @@ export async function getAdminApplicationsAction() {
   await requireAdminSession();
   if (!process.env.DATABASE_URL) return [];
   try {
-    return await db
+    const list = await db
       .select()
       .from(joinApplications)
       .orderBy(desc(joinApplications.createdAt));
+    return list.map((a) => ({
+      ...a,
+      createdAt: a.createdAt ? new Date(a.createdAt).toISOString() : new Date().toISOString(),
+      updatedAt: a.updatedAt ? new Date(a.updatedAt).toISOString() : new Date().toISOString(),
+    }));
   } catch (err) {
-    console.warn("Table join_applications pas encore migrée:", err);
+    console.warn("Table join_applications pas encore migrée ou erreur:", err);
+    return [];
+  }
+}
+
+export async function getFreshApplicationsAction() {
+  await requireAdminSession();
+  if (!process.env.DATABASE_URL) return [];
+  try {
+    const list = await db
+      .select()
+      .from(joinApplications)
+      .orderBy(desc(joinApplications.createdAt));
+    return list.map((a) => ({
+      ...a,
+      createdAt: a.createdAt ? new Date(a.createdAt).toISOString() : new Date().toISOString(),
+      updatedAt: a.updatedAt ? new Date(a.updatedAt).toISOString() : new Date().toISOString(),
+    }));
+  } catch (err) {
+    console.warn("getFreshApplicationsAction error:", err);
     return [];
   }
 }
