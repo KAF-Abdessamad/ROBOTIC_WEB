@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { MapPin, Mail, Phone } from "lucide-react";
 import { CLUB_INFO } from "@/lib/data/demo-data";
 
@@ -40,27 +39,8 @@ export function Footer() {
 
           {/* Col 1: Présentation + réseaux */}
           <div className="sm:col-span-2 lg:col-span-1">
-            {/* Logos du Club & Université Privée de Fès */}
-            <div className="inline-flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 mb-4 shadow-sm">
-              <Image
-                src="/logo upf.png"
-                alt="Université Privée de Fès"
-                width={70}
-                height={35}
-                className="h-7 w-auto object-contain"
-              />
-              <div className="w-px h-5 bg-slate-300 dark:bg-slate-700" />
-              <Image
-                src="/UPF LOGO CLUBS-robotique-09.png"
-                alt="Robotics Club UPF"
-                width={110}
-                height={35}
-                className="h-7 w-auto object-contain"
-              />
-            </div>
-
             {/* Titre du Club */}
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-4">
               <span className="font-extrabold text-lg text-slate-900 dark:text-white tracking-wide">
                 Robotics Club
               </span>

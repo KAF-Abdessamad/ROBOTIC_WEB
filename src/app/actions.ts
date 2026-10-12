@@ -22,6 +22,7 @@ import {
 import { eq, desc, asc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { DEMO_EVENTS, DEMO_MEMBERS } from "@/lib/data/demo-data";
 
 export interface ActionResult {
   success: boolean;
@@ -280,11 +281,13 @@ export async function getAdminApplicationsAction() {
 
 export async function getAdminEventsAction() {
   await requireAdminSession();
-  if (!process.env.DATABASE_URL) return [];
+  if (!process.env.DATABASE_URL) return DEMO_EVENTS as any[];
   try {
-    return await db.select().from(events).orderBy(desc(events.startDate));
+    const list = await db.select().from(events).orderBy(desc(events.startDate));
+    return list.length > 0 ? list : (DEMO_EVENTS as any[]);
   } catch (err) {
-    return [];
+    console.warn("getAdminEventsAction fallback:", err);
+    return DEMO_EVENTS as any[];
   }
 }
 
@@ -300,11 +303,13 @@ export async function getAdminProjectsAction() {
 
 export async function getAdminMembersAction() {
   await requireAdminSession();
-  if (!process.env.DATABASE_URL) return [];
+  if (!process.env.DATABASE_URL) return DEMO_MEMBERS as any[];
   try {
-    return await db.select().from(members).orderBy(asc(members.displayOrder));
+    const list = await db.select().from(members).orderBy(asc(members.displayOrder));
+    return list.length > 0 ? list : (DEMO_MEMBERS as any[]);
   } catch (err) {
-    return [];
+    console.warn("getAdminMembersAction fallback:", err);
+    return DEMO_MEMBERS as any[];
   }
 }
 
