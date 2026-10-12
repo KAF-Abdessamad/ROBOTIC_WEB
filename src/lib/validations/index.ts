@@ -29,7 +29,7 @@ export const UPF_STUDY_LEVELS = [
 export const joinApplicationSchema = z.object({
   fullName: z
     .string()
-    .min(3, "Le nom complet doit comporter au moins 3 caractères")
+    .min(2, "Le nom complet doit comporter au moins 2 caractères")
     .max(150, "Le nom complet ne peut pas dépasser 150 caractères"),
   email: z
     .string()
@@ -49,16 +49,16 @@ export const joinApplicationSchema = z.object({
     .default("1A"),
   motivation: z
     .string()
-    .min(5, "Expliquez votre motivation en au moins 5 caractères")
+    .optional()
+    .or(z.literal(""))
     .default("Passionné(e) par la robotique et motivé(e) pour rejoindre le Robotics Club UPF."),
   experience: z
     .string()
     .optional()
     .or(z.literal("")),
-  // Honeypot antispam : doit impérativement rester vide
+  // Honeypot antispam : géré en amont sans crasher Zod
   honeypot: z
     .string()
-    .max(0, "Tentative de spam détectée")
     .optional()
     .or(z.literal("")),
 });

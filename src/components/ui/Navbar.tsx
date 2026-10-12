@@ -20,28 +20,28 @@ export function Navbar() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logos UPF & Club de Robotique */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="bg-white/95 dark:bg-slate-900/90 rounded-2xl px-3 py-1.5 flex items-center gap-2.5 shadow-sm border border-slate-200 dark:border-slate-800 group-hover:border-cyan-500/50 group-hover:shadow-md group-hover:shadow-cyan-500/10 transition-all">
-              <div className="relative h-8 sm:h-9 w-14 sm:w-16 flex items-center justify-center">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+            <div className="bg-white/95 dark:bg-slate-900/90 rounded-2xl px-2 sm:px-3 py-1 sm:py-1.5 flex items-center gap-1.5 sm:gap-2.5 shadow-sm border border-slate-200 dark:border-slate-800 group-hover:border-cyan-500/50 group-hover:shadow-md group-hover:shadow-cyan-500/10 transition-all">
+              <div className="relative h-7 sm:h-9 w-12 sm:w-16 flex items-center justify-center">
                 <Image
                   src="/logo upf.png"
                   alt="Université Privée de Fès"
                   width={90}
                   height={45}
                   style={{ width: "auto" }}
-                  className="max-h-8 sm:max-h-9 w-auto object-contain transition-transform group-hover:scale-105"
+                  className="max-h-7 sm:max-h-9 w-auto object-contain transition-transform group-hover:scale-105"
                   priority
                 />
               </div>
-              <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
-              <div className="relative h-8 sm:h-9 w-20 sm:w-24 flex items-center justify-center">
+              <div className="w-px h-5 sm:h-6 bg-slate-200 dark:bg-slate-700" />
+              <div className="relative h-7 sm:h-9 w-16 sm:w-24 flex items-center justify-center">
                 <Image
                   src="/UPF LOGO CLUBS-robotique-09.png"
                   alt="Robotics Club UPF"
                   width={140}
                   height={45}
                   style={{ width: "auto" }}
-                  className="max-h-8 sm:max-h-9 w-auto object-contain transition-transform group-hover:scale-105"
+                  className="max-h-7 sm:max-h-9 w-auto object-contain transition-transform group-hover:scale-105"
                   priority
                 />
               </div>
@@ -82,28 +82,28 @@ export function Navbar() {
             >
               <Shield className="w-4 h-4" />
             </Link>
-            <a
-              href="#formulaire-rejoindre"
+            <Link
+              href="/join"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-300 hover:to-blue-300 transition-all shadow-md shadow-cyan-500/20 hover:scale-105 active:scale-95"
             >
               Rejoindre
               <ArrowRight className="w-3.5 h-3.5" />
-            </a>
+            </Link>
           </div>
 
           {/* Boutons Mobile */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-1 sm:gap-2">
             <ThemeToggle />
             <Link
               href="/admin/login"
-              className="p-2 text-slate-500 dark:text-slate-400 hover:text-cyan-500"
+              className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-cyan-500"
               title="Admin"
             >
               <Shield className="w-4 h-4" />
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-lg focus:outline-none"
+              className="p-1.5 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-lg focus:outline-none"
               aria-label="Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -126,14 +126,14 @@ export function Navbar() {
             </Link>
           ))}
           <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
-            <a
-              href="#formulaire-rejoindre"
+            <Link
+              href="/join"
               onClick={() => setMobileMenuOpen(false)}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-blue-400"
             >
               Rejoindre le club
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
           </div>
         </div>
       )}

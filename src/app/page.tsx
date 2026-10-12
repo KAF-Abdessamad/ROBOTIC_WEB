@@ -397,11 +397,6 @@ export default function HomePage() {
                     </div>
                   )}
 
-                  {/* Honeypot invisible */}
-                  <div className="hidden" aria-hidden="true">
-                    <input type="text" name="website_url_hp" tabIndex={-1} autoComplete="off" />
-                  </div>
-
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <input

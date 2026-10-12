@@ -9,6 +9,7 @@ import { Suspense } from "react";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
@@ -61,6 +62,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className="light scroll-smooth" data-theme="light" data-scroll-behavior="smooth" style={{ colorScheme: "light" }} suppressHydrationWarning>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

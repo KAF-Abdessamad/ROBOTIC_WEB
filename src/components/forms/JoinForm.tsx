@@ -18,17 +18,20 @@ export function JoinForm() {
     const fullName = (formData.get("fullName") as string || "").trim();
     const email = (formData.get("email") as string || "").trim();
     const facultyMajor = (formData.get("facultyMajor") as string || "").trim();
-    const motivation = (formData.get("motivation") as string || "").trim();
+    let motivation = (formData.get("motivation") as string || "").trim();
 
     const errors: Record<string, string> = {};
-    if (fullName.length < 3) errors.fullName = "Le nom et prénom doit comporter au moins 3 caractères.";
-    if (!email.includes("@") || !email.includes(".")) errors.email = "Adresse email invalide.";
+    if (fullName.length < 2) errors.fullName = "Le nom et prénom doit comporter au moins 2 caractères.";
+    if (!email.includes("@") || !email.includes(".")) errors.email = "Adresse email invalide (ex: nom@upf.ac.ma).";
     if (!facultyMajor) errors.facultyMajor = "Veuillez sélectionner votre filière UPF.";
-    if (motivation.length < 5) errors.motivation = "Votre motivation doit comporter au moins 5 caractères.";
 
     if (Object.keys(errors).length > 0) {
       setClientErrors(errors);
       return;
+    }
+
+    if (!motivation || motivation.length < 3) {
+      formData.set("motivation", "Passionné(e) par la robotique et motivé(e) pour rejoindre le Robotics Club UPF.");
     }
 
     setClientErrors({});
@@ -70,17 +73,6 @@ export function JoinForm() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 relative z-10">
-          {/* Honeypot invisible */}
-          <div className="hidden" aria-hidden="true">
-            <label htmlFor="website_url_hp">Ne pas remplir ce champ si vous êtes humain</label>
-            <input
-              type="text"
-              id="website_url_hp"
-              name="website_url_hp"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </div>
 
           {state && !state.success && (
             <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-300 text-xs flex items-center gap-2">

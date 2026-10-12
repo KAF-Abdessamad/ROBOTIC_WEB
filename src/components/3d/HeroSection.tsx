@@ -70,7 +70,7 @@ function PermanentRobotCard() {
     <div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full max-w-[320px] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[520px] aspect-square mx-auto flex items-center justify-center cursor-pointer group"
+      className="relative w-full max-w-[280px] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[520px] aspect-square mx-auto flex items-center justify-center cursor-pointer group"
       style={{ perspective: 1000 }}
     >
       {/* Halo lumineux d'ambiance */}
@@ -78,8 +78,8 @@ function PermanentRobotCard() {
       <div className="absolute inset-0 rounded-full bg-blue-600/20 blur-2xl pointer-events-none" />
 
       {/* Anneaux futuristes rotatifs */}
-      <div className="absolute inset-0 border border-cyan-500/30 rounded-full scale-105 pointer-events-none animate-[spin_20s_linear_infinite]" />
-      <div className="absolute inset-0 border border-blue-500/20 rounded-full scale-110 pointer-events-none border-dashed animate-[spin_35s_linear_infinite_reverse]" />
+      <div className="absolute inset-0 border border-cyan-500/30 rounded-full scale-95 sm:scale-105 pointer-events-none animate-[spin_20s_linear_infinite]" />
+      <div className="absolute inset-0 border border-blue-500/20 rounded-full scale-100 sm:scale-110 pointer-events-none border-dashed animate-[spin_35s_linear_infinite_reverse]" />
 
       {/* Cadre du robot avec inclinaison 3D fluide */}
       <motion.div
@@ -200,7 +200,7 @@ export function HeroSection({ onJoin }: HeroSectionProps) {
             {/* Titre principal */}
             <motion.h1
               variants={item}
-              className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black tracking-tight leading-[0.92] text-slate-900 dark:text-white"
+              className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black tracking-tight leading-[0.95] text-slate-900 dark:text-white"
             >
               BUILD{" "}
               <span
@@ -214,7 +214,7 @@ export function HeroSection({ onJoin }: HeroSectionProps) {
               >
                 THE FUTURE
               </span>
-              <span className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-bold text-slate-800 dark:text-slate-200 mt-2 sm:mt-3 block">
+              <span className="text-xl xs:text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-bold text-slate-800 dark:text-slate-200 mt-2 sm:mt-3 block">
                 Robotics Club{" "}
                 <span className="text-cyan-600 dark:text-cyan-400">UPF</span>
               </span>

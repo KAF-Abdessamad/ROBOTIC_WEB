@@ -76,8 +76,10 @@ export async function submitJoinApplication(
     };
   }
 
-  // Protection Honeypot
-  if (validation.data.honeypot && validation.data.honeypot.length > 0) {
+  // Honeypot non bloquant pour les autofills mobiles
+  const honeypotVal = ((formData.get("website_url_hp") as string) || "").trim();
+  if (honeypotVal.length > 50) {
+    // Seul un bot automatisé injectant de longs scripts ou URLs est ignoré silencieusement
     return {
       success: true,
       message: "Candidature reçue.",
