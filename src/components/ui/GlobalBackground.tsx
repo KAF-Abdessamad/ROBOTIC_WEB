@@ -15,7 +15,10 @@ export function GlobalBackground() {
   const isDark = mounted && theme === "dark";
 
   return (
-    <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden select-none transition-colors duration-500">
+    <div
+      suppressHydrationWarning
+      className="fixed inset-0 -z-50 pointer-events-none overflow-hidden select-none transition-colors duration-500"
+    >
       {/* ── IMAGE DE FOND DU SITE : robotique.webp ── */}
       <div className="absolute inset-0">
         <Image

@@ -92,7 +92,9 @@ export default function RootLayout({
             <Navbar />
           </Suspense>
 
-          <main className="flex-1 w-full">{children}</main>
+          <main className="flex-1 w-full" suppressHydrationWarning>
+            {children}
+          </main>
 
           <Footer />
         </ThemeProvider>
