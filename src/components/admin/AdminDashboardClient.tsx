@@ -42,7 +42,6 @@ interface AdminDashboardClientProps {
   initialData: {
     applications: any[];
     events: any[];
-    projects?: any[];
     members: any[];
     settings: any[];
     messages: any[];
@@ -83,7 +82,7 @@ export function AdminDashboardClient({
             Panneau d'Administration Intégral
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Gérez dynamiquement tout le contenu du club : candidatures, événements, staff, projets et coordonnées.
+            Gérez dynamiquement tout le contenu du club : candidatures, événements, staff et coordonnées.
           </p>
         </div>
 
