@@ -12,6 +12,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://robotic-web.vercel.app"
+  ),
   title: "Robotics Club UPF | Club de Robotique & IA - Université Privée de Fès",
   description:
     "Club officiel de robotique et d'intelligence artificielle de l'Université Privée de Fès (UPF). Projets mécatroniques, drones autonomes, vision par ordinateur et compétitions d'ingénierie.",
@@ -24,6 +27,30 @@ export const metadata: Metadata = {
     "Mécatronique Maroc",
   ],
   authors: [{ name: "Robotics Club UPF" }],
+  openGraph: {
+    title: "Robotics Club UPF | Club de Robotique & IA - Université Privée de Fès",
+    description:
+      "Club officiel de robotique et d'intelligence artificielle de l'UPF. Projets mécatroniques, drones autonomes et compétitions d'ingénierie.",
+    url: "https://robotic-web.vercel.app",
+    siteName: "Robotics Club UPF",
+    locale: "fr_FR",
+    type: "website",
+    images: [
+      {
+        url: "/robotique.webp",
+        width: 1200,
+        height: 630,
+        alt: "Robotics Club UPF Robot & Lab",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Robotics Club UPF | Club de Robotique & IA - Université Privée de Fès",
+    description:
+      "Club officiel de robotique et d'intelligence artificielle de l'UPF. Conception mécatronique, ROS 2 et innovation.",
+    images: ["/robotique.webp"],
+  },
 };
 
 export default function RootLayout({

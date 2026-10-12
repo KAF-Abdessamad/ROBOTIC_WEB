@@ -9,7 +9,7 @@ export async function getPublicMembers() {
     const list = await db
       .select()
       .from(members)
-      .where(asc(members.displayOrder));
+      .orderBy(asc(members.displayOrder));
 
     if (list.length > 0) {
       return list.map((m) => ({

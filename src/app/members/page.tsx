@@ -132,6 +132,34 @@ export default async function MembersPage() {
             </section>
           );
         })}
+
+        {/* Membres d'autres pôles ou nouvelles sections */}
+        {(() => {
+          const standardKeys = new Set(SECTIONS.map((s) => s.key));
+          const others = allMembers.filter((m) => !standardKeys.has(m.team));
+          if (others.length === 0) return null;
+
+          return (
+            <section>
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-800/60 mb-3">
+                  Autres Pôles & Responsables
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+                    Membres Actifs & Spécialistes
+                  </h2>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {others.map((member) => (
+                  <MemberCard key={member.id} member={member} />
+                ))}
+              </div>
+            </section>
+          );
+        })()}
       </div>
     </div>
   );

@@ -460,7 +460,18 @@ export function AdminDashboardClient({
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Pôle / Section</label>
-                  <input name="team" defaultValue={editingMember.team} required className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
+                  <select
+                    name="team"
+                    defaultValue={editingMember.team || "Leadership"}
+                    required
+                    className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                  >
+                    <option value="Leadership">Leadership (Direction & Présidence)</option>
+                    <option value="Communication & Médias">Communication & Médias</option>
+                    <option value="Ressources & Gestion">Ressources & Gestion</option>
+                    <option value="Expertise & Conseil">Expertise & Conseil</option>
+                    <option value="Autre">Autre Pôle</option>
+                  </select>
                 </div>
                 <div className="md:col-span-2">
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Bio courte</label>

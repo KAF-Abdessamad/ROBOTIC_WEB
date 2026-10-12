@@ -351,6 +351,10 @@ export async function updateSiteSettingAction(formData: FormData): Promise<Actio
       });
 
     revalidatePath("/", "layout");
+    revalidatePath("/contact");
+    revalidatePath("/members");
+    revalidatePath("/activities");
+    revalidatePath("/admin/dashboard");
     return { success: true, message: `Paramètre '${key}' mis à jour avec succès !` };
   } catch (err: any) {
     return { success: false, message: err?.message || "Erreur lors de la mise à jour" };
