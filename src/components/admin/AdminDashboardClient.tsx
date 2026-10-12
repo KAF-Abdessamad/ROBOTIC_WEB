@@ -446,6 +446,7 @@ export function AdminDashboardClient({
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
                 <input type="hidden" name="id" value={editingMember.id || ""} />
+                <input type="hidden" name="avatarUrl" value={editingMember.avatarUrl || ""} />
                 <div>
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Prénom</label>
                   <input name="firstName" defaultValue={editingMember.firstName} required className="w-full mt-1 p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
